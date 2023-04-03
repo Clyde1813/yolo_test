@@ -30,7 +30,7 @@ def get_detection_folder():
 
 if __name__ == '__main__':
 
-    st.title('YOLOv5 Streamlit App')
+    st.title('YOLOv5 Demo')
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str,
@@ -71,27 +71,27 @@ if __name__ == '__main__':
     print(opt)
 
     source = ("图片检测", "视频检测")
-    source_index = st.sidebar.selectbox("选择输入", range(
+    source_index = st.selectbox("选择输入", range(
         len(source)), format_func=lambda x: source[x])
 
     if source_index == 0:
-        uploaded_file = st.sidebar.file_uploader(
+        uploaded_file = st.file_uploader(
             "上传图片", type=['png', 'jpeg', 'jpg'])
         if uploaded_file is not None:
             is_valid = True
             with st.spinner(text='资源加载中...'):
-                st.sidebar.image(uploaded_file)
+                #st.image(uploaded_file)
                 picture = Image.open(uploaded_file)
                 picture = picture.save(f'data/images/{uploaded_file.name}')
                 opt.source = f'data/images/{uploaded_file.name}'
         else:
             is_valid = False
     else:
-        uploaded_file = st.sidebar.file_uploader("上传视频", type=['mp4'])
+        uploaded_file = st.file_uploader("上传视频", type=['mp4'])
         if uploaded_file is not None:
             is_valid = True
             with st.spinner(text='资源加载中...'):
-                st.sidebar.video(uploaded_file)
+                st.video(uploaded_file)
                 with open(os.path.join("data", "videos", uploaded_file.name), "wb") as f:
                     f.write(uploaded_file.getbuffer())
                 opt.source = f'data/videos/{uploaded_file.name}'
@@ -109,10 +109,9 @@ if __name__ == '__main__':
                     for img in os.listdir(get_detection_folder()):
                         st.image(str(Path(f'{get_detection_folder()}') / img))
 
-                    st.balloons()
             else:
                 with st.spinner(text='Preparing Video'):
                     for vid in os.listdir(get_detection_folder()):
                         st.video(str(Path(f'{get_detection_folder()}') / vid))
 
-                    st.balloons()
+
